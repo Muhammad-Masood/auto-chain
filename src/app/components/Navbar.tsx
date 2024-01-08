@@ -1,12 +1,12 @@
-"use client"
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { Disclosure } from "@headlessui/react";
 import { navbarLinks } from "@/lib/utils";
 import { NavLink } from "@/lib/types";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 const NavBar = () => {
-
   return (
     <div className="w-full">
       <nav className="container relative flex flex-wrap items-center justify-between p-8 mx-auto lg:justify-between xl:px-3">
@@ -57,21 +57,20 @@ const NavBar = () => {
 
                 <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden">
                   <>
-                    {navbarLinks.map((item:NavLink, index:number) => (
+                    {navbarLinks.map((item: NavLink, index: number) => (
                       <Link
                         key={index}
                         href={item.href}
-                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none"
+                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none duration-300"
                       >
                         {item.name}
                       </Link>
                     ))}
-                    <Link
-                      href="/"
-                      className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5"
-                    >
-                      Get Started
-                    </Link>
+                    <ConnectWallet
+                      theme={"dark"}
+                      modalSize={"wide"}
+                      className="!px-6 !py-2 !text-white !bg-indigo-600 !rounded-md !md:ml-5"
+                    />
                   </>
                 </Disclosure.Panel>
               </div>
@@ -82,11 +81,11 @@ const NavBar = () => {
         {/* menu  */}
         <div className="hidden text-center lg:flex lg:items-center">
           <ul className="items-center justify-end flex-1 pt-6 list-none lg:pt-0 lg:flex">
-            {navbarLinks.map((menu:NavLink, index:number) => (
+            {navbarLinks.map((menu: NavLink, index: number) => (
               <li className="mr-3 nav__item" key={index}>
                 <Link
                   href={menu.href}
-                  className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800"
+                  className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800 duration-300"
                 >
                   {menu.name}
                 </Link>
@@ -96,12 +95,11 @@ const NavBar = () => {
         </div>
 
         <div className="hidden mr-3 space-x-4 lg:flex nav__item">
-          <Link
-            href="/"
-            className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"
-          >
-            Get Started
-          </Link>
+          <ConnectWallet
+            theme={"dark"}
+            modalSize={"wide"}
+            className="!px-6 !py-2 !text-white !bg-indigo-600 !rounded-md !md:ml-5"
+          />
         </div>
       </nav>
     </div>

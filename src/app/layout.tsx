@@ -1,8 +1,8 @@
-"use client";
 import "./globals.css";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Poppins } from "next/font/google";
 import NavBar from "./components/Navbar";
+import { ThemeProvider, ThirdwebProvider } from "@/providers/Providers";
+import { Toaster } from "react-hot-toast";
 
 export const poppins = Poppins({
   weight: "700",
@@ -20,10 +20,13 @@ export default function RootLayout({
         <title>Auto Chain</title>
       </head>
       <body className="xl:px-[4rem]">
-        <NextThemesProvider attribute="class" defaultTheme="dark">
+        <ThemeProvider>
+          <ThirdwebProvider activeChain="binance-testnet" clientId={process.env.CLIENT_KEY}>
+            <Toaster position="top-center"/>
           <NavBar />
           {children}
-        </NextThemesProvider>
+          </ThirdwebProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

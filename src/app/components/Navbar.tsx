@@ -5,6 +5,9 @@ import { Disclosure } from "@headlessui/react";
 import { navbarLinks } from "@/lib/utils";
 import { NavLink } from "@/lib/types";
 import { ConnectWallet } from "@thirdweb-dev/react";
+import localFont from 'next/font/local';
+
+const dash = localFont({ src: './Dashhorizon-eZ5wg.otf' });
 
 const NavBar = () => {
   return (
@@ -16,8 +19,8 @@ const NavBar = () => {
             <>
               <div className="flex flex-wrap items-center justify-between w-full lg:w-auto">
                 <Link href="/">
-                  <span className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
-                    <span>
+                  <span className="flex items-center space-x-2">
+                    <span className="">
                       <Image
                         src="/logo.png"
                         alt="N"
@@ -26,7 +29,7 @@ const NavBar = () => {
                         className="w-8"
                       />
                     </span>
-                    <span>AutoChain</span>
+                    <span className={`${dash.className} tracking-wider text-3xl pb-3`}>AutoChain</span>
                   </span>
                 </Link>
 

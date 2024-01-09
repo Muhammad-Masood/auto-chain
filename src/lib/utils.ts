@@ -14,5 +14,9 @@ export const navbarLinks: NavLink[] = [
   {
     name: "Rent",
     href: "/rent"
+  },
+  {
+    name: "My Garage",
+    href: "/garage"
   }
 ] 

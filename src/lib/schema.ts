@@ -10,6 +10,11 @@ const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 //   "Only .jpg, .jpeg, .png and .webp formats are supported."
 // ),
 
+
+export const burnFormSchema = z.object({
+  tokenId: z.number().gte(0),
+})
+
 export const mintFormSchema = z.object({
   // basicInformation: z.object({
   image: z.any(),

@@ -98,7 +98,7 @@ const MintForm = () => {
       // mint nft
       try {
         toast.dismiss();
-        toast.loading("Waiting for transaction confirmation...");
+        const transToastId = toast.loading("Waiting for transaction confirmation...");
         const result = await contract!.call("mint", [metadataURI[0]]);
         toast.dismiss();
         console.log(result.receipt.transationHash);
@@ -106,6 +106,7 @@ const MintForm = () => {
           "Vehicle Minted successfully!",
           result.receipt.transationHash
         );
+        toast.dismiss(transToastId);
         router.refresh();
       } catch (e) {
         toast.dismiss();

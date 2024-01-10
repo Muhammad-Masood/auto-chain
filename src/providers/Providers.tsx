@@ -10,3 +10,5 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     </NextThemesProvider>
   );
 }
+
+export function ContractProvider({ children }: { children: React.ReactNode }) {}

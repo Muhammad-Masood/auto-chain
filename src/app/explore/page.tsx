@@ -1,8 +1,10 @@
+import GarageData from "../components/GarageData"
 
 const page = () => {
   return (
-    <div className="p-4">
-        <p className="text-3xl">Launched Vehicles</p>
+    <div className="p-4 space-y-8">
+      <p className="text-3xl">Launched Vehicles</p>
+      <GarageData isCollection={true}/>
     </div>
   )
 }

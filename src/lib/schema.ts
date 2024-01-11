@@ -52,3 +52,12 @@ export const mintFormSchema = z.object({
   warrantyStatus: z.string(),
   legalDisclaimers: z.string(),
 });
+
+
+export const listFormSchema = z.object({
+  tokenId: z.number().gte(0),
+  price: z.number().gt(0),
+  terms: z.string(),
+  durationFrom: z.date().min(new Date()), 
+  durationTill: z.date().min(new Date()),
+})

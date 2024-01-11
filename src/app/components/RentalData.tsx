@@ -21,7 +21,7 @@ interface ListedVehicle {
 }
 
 const RentalData = () => {
-  const [listedVehicles, setListedVehicles] = useState<ListedVehicle>([{ima}]);
+  const [listedVehicles, setListedVehicles] = useState<ListedVehicle[]>([{imageURL: "", tokenId:0}]);
   const [isLoading, setIsLoading] = useState(true);
   const { contract } = useContract(rentalContractAddress, rentalABI);
 

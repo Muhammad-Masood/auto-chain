@@ -26,12 +26,17 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { rentalABI, rentalContractAddress } from "@/contract/ContractInfo";
-import { useAddress, useContract } from "@thirdweb-dev/react";
+import { TransactionError, useAddress, useContract } from "@thirdweb-dev/react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { ListVehicle } from "@/lib/types";
+import { BigNumber, ethers } from "ethers";
 
 const ListForm = () => {
-  const [date, setDate] = useState<Date>();
+  const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date());
+  const [dateTill, setDateTill] = useState<Date | undefined>(new Date());
   const address = useAddress();
+  const router = useRouter();
   const { contract } = useContract(rentalContractAddress, rentalABI);
 
   const listForm = useForm<z.infer<typeof listFormSchema>>({
@@ -39,13 +44,32 @@ const ListForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof listFormSchema>) {
-    console.log(values);
-    toast.loading("Waiting for transaction confirmation...");
-    const {price, durationFrom, durationTill, terms} = values;
-    const listedVehicle = await contract!.call("list", [values.tokenId, {price, durationFrom, durationTill, terms}]);
-    console.log(listedVehicle);
-    toast.dismiss();
-    toast.success("Vehicle listed successfully for rent!");
+    const transLoadToast = toast.loading(
+      "Waiting for transaction confirmation..."
+    );
+    const _price: string = ethers.utils.parseEther(values.price).toString();
+    const durationFromTimestamp: number = new Date(
+      values.durationFrom
+    ).getTime();
+    const durationTillTimestamp: number = new Date(
+      values.durationTill
+    ).getTime();
+    const _terms: string = values.terms;
+    try {
+      const listedVehicle = await contract!.call("addListing", [
+        values.tokenId,
+        [_price, durationFromTimestamp, durationTillTimestamp, _terms],
+      ]);
+      console.log(listedVehicle);
+      toast.success("Vehicle listed successfully for rent!");
+      router.replace(`/list`);
+    } catch (error) {
+      const errorReason: string = (error as TransactionError)?.reason;
+      toast.error(errorReason);
+      console.log(error);
+    } finally {
+      toast.dismiss(transLoadToast);
+    }
   }
 
   return (
@@ -82,14 +106,7 @@ const ListForm = () => {
               <FormItem>
                 <FormLabel>Rent Price</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="ex 1.2 BNB"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(parseInt(e.target.value, 10))
-                    }
-                  />
+                  <Input type="number" placeholder="ex 1.2 BNB" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -118,66 +135,35 @@ const ListForm = () => {
               <FormItem>
                 <FormLabel>Date From</FormLabel>
                 <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                        {...field}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    type="date"
+                    placeholder="rental terms and conditions..."
+                    {...field}
+                    // value={field.value instanceof Date ? field.value.toISOString().split('T')[0] : field.value}
+                  />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={listForm.control}
             name="durationTill"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Date Till</FormLabel>
                 <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input
+                    type="date"
+                    placeholder="rental terms and conditions..."
+                    {...field}
+                    // value={field.value instanceof Date ? field.value.toISOString().split('T')[0] : field.value}
+                  />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <Button type="submit">Submit</Button>
         </form>
       </Form>

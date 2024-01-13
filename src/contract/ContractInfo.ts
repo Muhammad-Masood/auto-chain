@@ -1,5 +1,5 @@
 export const rentalContractAddress: string =
-  "0x1A0BB64F0044CC5464455B79CEAcde0e05651C3b";
+  "0x3D88cC7033f2E641AD79CFA51b5470c7D508bE1a";
 export const tokenContractAddress: string =
   "0x48A755561f74FBADC433752D2A02B1f1099Ec6ab";
 
@@ -207,12 +207,39 @@ export const rentalABI = [
   },
   {
     inputs: [
+      { internalType: "uint256", name: "_tokenId", type: "uint256" },
+      {
+        components: [
+          { internalType: "uint256", name: "price", type: "uint256" },
+          { internalType: "uint256", name: "durationFrom", type: "uint256" },
+          { internalType: "uint256", name: "durationTill", type: "uint256" },
+          { internalType: "string", name: "terms", type: "string" },
+        ],
+        internalType: "struct AutoChainRental.RentalDetails",
+        name: "_rentalDetails",
+        type: "tuple",
+      },
+    ],
+    name: "addListing",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "tokenId", type: "uint256" },
     ],
     name: "approve",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "availableVehiclesForRent",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -230,15 +257,8 @@ export const rentalABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "getApproved",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
-    name: "getCarRentalDetails",
+    name: "carRentalDetails",
     outputs: [
       {
         components: [
@@ -257,7 +277,14 @@ export const rentalABI = [
   },
   {
     inputs: [],
-    name: "getERC20TokenAddress",
+    name: "erc20TokenAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "getApproved",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
@@ -297,26 +324,6 @@ export const rentalABI = [
     name: "isApprovedForAll",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "_tokenId", type: "uint256" },
-      {
-        components: [
-          { internalType: "uint256", name: "price", type: "uint256" },
-          { internalType: "uint256", name: "durationFrom", type: "uint256" },
-          { internalType: "uint256", name: "durationTill", type: "uint256" },
-          { internalType: "string", name: "terms", type: "string" },
-        ],
-        internalType: "struct AutoChainRental.RentalDetails",
-        name: "_rentalDetails",
-        type: "tuple",
-      },
-    ],
-    name: "list",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -365,7 +372,7 @@ export const rentalABI = [
     inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
     name: "rent",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -416,6 +423,20 @@ export const rentalABI = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "tokenIdsListed",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "tokenIdsRented",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "tokenURI",
     outputs: [{ internalType: "string", name: "", type: "string" }],
@@ -447,163 +468,6 @@ export const rentalABI = [
     ],
     name: "updateMaintenanceHistory",
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-];
-export const tokenABI = [
-  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
-  {
-    inputs: [
-      { internalType: "address", name: "spender", type: "address" },
-      { internalType: "uint256", name: "allowance", type: "uint256" },
-      { internalType: "uint256", name: "needed", type: "uint256" },
-    ],
-    name: "ERC20InsufficientAllowance",
-    type: "error",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "sender", type: "address" },
-      { internalType: "uint256", name: "balance", type: "uint256" },
-      { internalType: "uint256", name: "needed", type: "uint256" },
-    ],
-    name: "ERC20InsufficientBalance",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "approver", type: "address" }],
-    name: "ERC20InvalidApprover",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "receiver", type: "address" }],
-    name: "ERC20InvalidReceiver",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "sender", type: "address" }],
-    name: "ERC20InvalidSender",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "spender", type: "address" }],
-    name: "ERC20InvalidSpender",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: "address", name: "from", type: "address" },
-      { indexed: true, internalType: "address", name: "to", type: "address" },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "owner", type: "address" },
-      { internalType: "address", name: "spender", type: "address" },
-    ],
-    name: "allowance",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "spender", type: "address" },
-      { internalType: "uint256", name: "value", type: "uint256" },
-    ],
-    name: "approve",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "account", type: "address" }],
-    name: "balanceOf",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "decimals",
-    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "symbol",
-    outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalSupply",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "to", type: "address" },
-      { internalType: "uint256", name: "value", type: "uint256" },
-    ],
-    name: "transfer",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "from", type: "address" },
-      { internalType: "address", name: "to", type: "address" },
-      { internalType: "uint256", name: "value", type: "uint256" },
-    ],
-    name: "transferFrom",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "nonpayable",
     type: "function",
   },

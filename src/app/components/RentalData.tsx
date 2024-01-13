@@ -49,12 +49,12 @@ const RentalData = () => {
             await (await fetch(ipfsToHTTP(tokenURI))).text()
           );
           const imageURL: string = ipfsToHTTP(image);
-          setIsLoading(false);
           return { imageURL, tokenId: id };
         })
       );
+      setIsLoading(false);
       setListedVehicles(listedVehiclesData);
-      console.log(listedVehiclesData);
+      console.log("listed_vehicles",listedVehiclesData);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +68,7 @@ const RentalData = () => {
 
   return isLoading ? (
     <Skeleton className="w-[200px] h-[200px]" />
-  ) : !isLoading && !listedVehicles ? (
+  ) : !isLoading && listedVehicles.length===0 ? (
     <div className="gap-y-6 flex flex-col">
       <p className="text-3xl">No Vehicles For Rent</p>
     </div>

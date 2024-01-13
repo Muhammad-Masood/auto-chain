@@ -21,10 +21,14 @@ export default function RootLayout({
       </head>
       <body className="xl:px-[4rem]">
         <ThemeProvider>
-          <ThirdwebProvider activeChain="binance-testnet" clientId={process.env.CLIENT_KEY}>
-            <Toaster position="top-center"/>
-          <NavBar />
-          {children}
+          <ThirdwebProvider
+            activeChain="binance-testnet"
+            clientId={process.env.CLIENT_KEY}
+            secretKey={process.env.SECRET_KEY}
+          >
+            <Toaster position="top-center" />
+            <NavBar />
+            {children}
           </ThirdwebProvider>
         </ThemeProvider>
       </body>

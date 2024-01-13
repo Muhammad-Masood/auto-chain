@@ -1,12 +1,12 @@
-import GarageData from "../components/GarageData"
+import GarageData from "../components/GarageData";
 
-const page = () => {
+const page = async () => {
   return (
     <div className="p-4 space-y-8">
       <p className="text-3xl">Launched Vehicles</p>
-      <GarageData isCollection={true}/>
+      <GarageData isCollection={true} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

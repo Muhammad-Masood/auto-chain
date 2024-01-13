@@ -51,13 +51,17 @@ export const mintFormSchema = z.object({
   numberOfPreviousOwners: z.number(),
   warrantyStatus: z.string(),
   legalDisclaimers: z.string(),
+  // address: z.string().min(42).max(42, { message: "Invalid wallet address" }),
 });
 
 
 export const listFormSchema = z.object({
   tokenId: z.number().gte(0),
-  price: z.number().gt(0),
+  price: z.string().refine((value) => {
+    const parsedValue = parseFloat(value);
+    return !isNaN(parsedValue) && isFinite(parsedValue) && parsedValue > 0;
+  }, { message: "Invalid rent price" }),
   terms: z.string(),
-  durationFrom: z.date().min(new Date()), 
-  durationTill: z.date().min(new Date()),
-})
+  durationFrom: z.string(),
+  durationTill: z.string(),
+});

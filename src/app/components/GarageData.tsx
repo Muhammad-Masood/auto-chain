@@ -46,11 +46,11 @@ const GarageData = ({ isCollection }: { isCollection: boolean }) => {
             await (await fetch(ipfsToHTTP(tokenURI))).text()
           );
           const imageURL: string = ipfsToHTTP(image);
-          setIsLoading(false);
           return imageURL;
         })
       );
       setImagesURIS(imagesURLS);
+      setIsLoading(false);
       console.log(imagesURLS);
     } catch (error) {
       console.log(error);
@@ -66,7 +66,7 @@ const GarageData = ({ isCollection }: { isCollection: boolean }) => {
 
   return isLoading ? (
     <Skeleton className="w-[200px] h-[200px]" />
-  ) : !isLoading && !imagesURIS ? (
+  ) : !isLoading && imagesURIS.length===0 ? (
     <div className="gap-y-6 flex flex-col">
       <p className="text-3xl">
         {!isCollection ? "No Vehicles In The Garage" : "No Vehicles Available"}

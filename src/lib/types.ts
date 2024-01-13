@@ -3,7 +3,7 @@ export type NavLink = {
     href: string
 }
 
-export interface RentVehicle  {
+export interface ListVehicle  {
     price: number;
     dateFrom: number;
     dateTill: number;

@@ -5,9 +5,14 @@ import { Disclosure } from "@headlessui/react";
 import { navbarLinks } from "@/lib/utils";
 import { NavLink } from "@/lib/types";
 import { ConnectWallet } from "@thirdweb-dev/react";
-import localFont from 'next/font/local';
+import localFont from "next/font/local";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
-const dash = localFont({ src: './Dashhorizon-eZ5wg.otf' });
+const dash = localFont({ src: "./Dashhorizon-eZ5wg.otf" });
 
 const NavBar = () => {
   return (
@@ -29,7 +34,11 @@ const NavBar = () => {
                         className="w-8"
                       />
                     </span>
-                    <span className={`${dash.className} tracking-wider text-3xl pb-3`}>AutoChain</span>
+                    <span
+                      className={`${dash.className} tracking-wider text-3xl pb-3 `}
+                    >
+                      AutoChain
+                    </span>
                   </span>
                 </Link>
 
@@ -58,23 +67,49 @@ const NavBar = () => {
                   </svg>
                 </Disclosure.Button>
 
-                <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden">
-                  <>
-                    {navbarLinks.map((item: NavLink, index: number) => (
-                      <Link
-                        key={index}
-                        href={item.href}
-                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none duration-300"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                    <ConnectWallet
-                      theme={"dark"}
-                      modalSize={"wide"}
-                      className="!px-6 !py-2 !text-white !bg-indigo-600 !rounded-md !md:ml-5"
-                    />
-                  </>
+                <Disclosure.Panel className="flex flex-col w-full my-5 lg:hidden">
+                  {navbarLinks.map((item: NavLink, index: number) => (
+                    <div key={index} className="mb-3">
+                      {item.name !== "Rent" ? (
+                        <Link
+                          href={item.href}
+                          className="block px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none duration-300"
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <Link
+                              href={item.href}
+                              className="block px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none duration-300"
+                            >
+                              {item.name}
+                            </Link>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <Link
+                              href="/list"
+                              className="block px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 duration-300"
+                            >
+                              List Car
+                            </Link>
+                            <Link
+                              href="/rent"
+                              className="block px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 duration-300"
+                            >
+                              Rent Car
+                            </Link>
+                          </HoverCardContent>
+                        </HoverCard>
+                      )}
+                    </div>
+                  ))}
+                  <ConnectWallet
+                    theme="dark"
+                    modalSize="wide"
+                    className="block px-6 py-2 text-white bg-indigo-600 rounded-md mt-3 md:ml-5"
+                  />
                 </Disclosure.Panel>
               </div>
             </>
@@ -86,12 +121,36 @@ const NavBar = () => {
           <ul className="items-center justify-end flex-1 pt-6 list-none lg:pt-0 lg:flex">
             {navbarLinks.map((menu: NavLink, index: number) => (
               <li className="mr-3 nav__item" key={index}>
-                <Link
-                  href={menu.href}
-                  className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800 duration-300"
-                >
-                  {menu.name}
-                </Link>
+                {menu.name !== "Rent" ? (
+                  <Link
+                    href={menu.href}
+                    className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800 duration-300"
+                  >
+                    {menu.name}
+                  </Link>
+                ) : (
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <p className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none duration-300 cursor-pointer">
+                        {menu.name}
+                      </p>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <Link
+                        href={"/list"}
+                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500  duration-300"
+                      >
+                        List Car
+                      </Link>
+                      <Link
+                        href={"/rent"}
+                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500    duration-300"
+                      >
+                        Rent Car
+                      </Link>
+                    </HoverCardContent>
+                  </HoverCard>
+                )}
               </li>
             ))}
           </ul>

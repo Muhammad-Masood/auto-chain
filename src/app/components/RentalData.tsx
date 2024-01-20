@@ -76,6 +76,7 @@ const RentalData = () => {
     if (contract && address) {
       fetchAndSetRentedVehiclesData();
     }
+    console.log("consdns",contract,address);
   }, [contract, address]);
 
   return address ? (

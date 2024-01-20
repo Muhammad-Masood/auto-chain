@@ -24,6 +24,7 @@ const GarageData = ({ isCollection }: { isCollection: boolean }) => {
 
   const router = useRouter();
   const address = useAddress();
+  const searchParams = useSearchParams();
 
   const ipfsToHTTP = (uri: string): string => {
     const ipfsHash: string = uri.replace("ipfs://", "");
@@ -58,7 +59,9 @@ const GarageData = ({ isCollection }: { isCollection: boolean }) => {
   }
 
   useEffect(() => {
-    isCollection ? router.push("?mode=collection") : "";
+    if(isCollection && !searchParams.has("mode")){
+      router.push("?mode=collection");
+    }
     if (contract && address) {
       fetchTokenIds();
     }

@@ -1,9 +1,8 @@
 import RentVehicleData from "@/app/components/RentVehicleData";
 
-const page = ({params}:{params:{tokenId:number}}) => {
+const page = ({params}:{params:{tokenId:string}}) => {
     const {tokenId} = params;
-    console.log(tokenId, typeof tokenId);
-    return <RentVehicleData vehicleId={tokenId}/>
+    return <RentVehicleData vehicleId={Number(tokenId)}/>
 }
 
 export default page

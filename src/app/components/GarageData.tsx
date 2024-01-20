@@ -64,7 +64,7 @@ const GarageData = ({ isCollection }: { isCollection: boolean }) => {
     }
   }, [contract, address]);
 
-  return isLoading ? (
+  return address?isLoading ? (
     <Skeleton className="w-[200px] h-[200px]" />
   ) : !isLoading && imagesURIS.length===0 ? (
     <div className="gap-y-6 flex flex-col">
@@ -93,7 +93,7 @@ const GarageData = ({ isCollection }: { isCollection: boolean }) => {
         />
       ))}
     </div>
-  );
+  ):<p>Connect Wallet</p>;
 };
 
 export default GarageData;

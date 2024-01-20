@@ -88,6 +88,7 @@ const MintForm = () => {
       toast.error("Connect your wallet!");
     } else {
       toast.loading("Preparing your Vehicle NFT...");
+      try {
       const uri: string[] = await upload({ data: [image!] });
       values.image = uri[0];
       const serializedMetadata = JSON.stringify(values, null, 2);
@@ -96,10 +97,9 @@ const MintForm = () => {
       });
       console.log(metadataURI[0]);
       // mint nft
-      try {
         toast.dismiss();
         const transToastId = toast.loading("Waiting for transaction confirmation...");
-        const result = await contract!.call("mint", [metadataURI[0]]);
+        const result = await contract!.call("mint", [metadataURI[0], address]);
         toast.dismiss();
         console.log(result.receipt.transationHash);
         toast.success(
@@ -107,7 +107,7 @@ const MintForm = () => {
           result.receipt.transationHash
         );
         toast.dismiss(transToastId);
-        router.refresh();
+        router.replace('/admin/mint');
       } catch (e) {
         toast.dismiss();
         const errorReason:string = (e as TransactionError)?.reason;

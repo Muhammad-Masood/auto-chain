@@ -10,10 +10,9 @@ const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 //   "Only .jpg, .jpeg, .png and .webp formats are supported."
 // ),
 
-
 export const burnFormSchema = z.object({
   tokenId: z.number().gte(0),
-})
+});
 
 export const mintFormSchema = z.object({
   // basicInformation: z.object({
@@ -54,13 +53,15 @@ export const mintFormSchema = z.object({
   // address: z.string().min(42).max(42, { message: "Invalid wallet address" }),
 });
 
-
 export const listFormSchema = z.object({
   tokenId: z.number().gte(0),
-  price: z.string().refine((value) => {
-    const parsedValue = parseFloat(value);
-    return !isNaN(parsedValue) && isFinite(parsedValue) && parsedValue > 0;
-  }, { message: "Invalid rent price" }),
+  price: z.string().refine(
+    (value) => {
+      const parsedValue = parseFloat(value);
+      return !isNaN(parsedValue) && isFinite(parsedValue) && parsedValue > 0;
+    },
+    { message: "Invalid rent price" }
+  ),
   terms: z.string(),
   durationFrom: z.string(),
   durationTill: z.string(),

@@ -62,7 +62,7 @@ const ListForm = () => {
       ]);
       console.log(listedVehicle);
       toast.success("Vehicle listed successfully for rent!");
-      router.replace(`/list`);
+      router.replace(`/rent`);
     } catch (error) {
       const errorReason: string = (error as TransactionError)?.reason;
       toast.error(errorReason);

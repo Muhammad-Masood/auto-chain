@@ -1,5 +1,5 @@
 export const rentalContractAddress: string =
-  "0x3D88cC7033f2E641AD79CFA51b5470c7D508bE1a";
+  "0x4D063585f7131D4Fa0F0eFB17107Fc5b6F29B193";
 export const tokenContractAddress: string =
   "0x48A755561f74FBADC433752D2A02B1f1099Ec6ab";
 
@@ -56,11 +56,6 @@ export const rentalABI = [
   {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "ERC721NonexistentToken",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "InvalidOwner",
     type: "error",
   },
   { inputs: [], name: "IsAlreadyRented", type: "error" },
@@ -236,13 +231,6 @@ export const rentalABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "availableVehiclesForRent",
-    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "address", name: "owner", type: "address" }],
     name: "balanceOf",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -327,7 +315,10 @@ export const rentalABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "string", name: "_tokenURI", type: "string" }],
+    inputs: [
+      { internalType: "string", name: "_tokenURI", type: "string" },
+      { internalType: "address", name: "_address", type: "address" },
+    ],
     name: "mint",
     outputs: [],
     stateMutability: "nonpayable",
@@ -373,6 +364,19 @@ export const rentalABI = [
     name: "rent",
     outputs: [],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_tokenId", type: "uint256" }],
+    name: "rentStatus",
+    outputs: [
+      {
+        internalType: "enum AutoChainRental.RentStatus",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { rentalABI, rentalContractAddress } from "@/contract/ContractInfo";
+import { mintFormSchema } from "@/lib/schema";
 import { ListVehicle } from "@/lib/types";
 import { TransactionError, useAddress, useContract } from "@thirdweb-dev/react";
 import { ethers, utils } from "ethers";
@@ -8,6 +9,8 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { ipfsToHTTP } from "./GarageData";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // interface RentedVehicle extends RentVehicle {
 //     image: string;
@@ -16,7 +19,8 @@ import toast from "react-hot-toast";
 
 const RentVehicleData = ({ vehicleId }: { vehicleId: number }) => {
   const [rentData, setRentData] = useState<ListVehicle>();
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [metadata, setMetadata] = useState<typeof mintFormSchema.shape>();
   const imageURL: string = useSearchParams().get("uri") || "";
   const address = useAddress();
   const { contract } = useContract(rentalContractAddress, rentalABI);
@@ -50,7 +54,12 @@ const RentVehicleData = ({ vehicleId }: { vehicleId: number }) => {
         price: Number(utils.formatEther(rentDataResponse.price)),
         terms: rentDataResponse.terms,
       };
-      console.log(rentalData);
+      const tokenURI: string = await contract!.call("tokenURI", [vehicleId]);
+      const vehicleData: typeof mintFormSchema.shape = JSON.parse(
+        await (await fetch(ipfsToHTTP(tokenURI))).text()
+      );
+      setMetadata(vehicleData);
+      console.log(vehicleData);
       setRentData(rentalData);
     } catch (error) {
       console.log(error);
@@ -91,10 +100,15 @@ const RentVehicleData = ({ vehicleId }: { vehicleId: number }) => {
           Rent Now
         </Button>
         <p className="text-sm">Terms: {rentData.terms}</p>
+        {metadata && (
+          <ScrollArea className="h-72 w-full rounded-md border">
+            <pre className="w-full h-full p-4 overflow-auto text-wrap">{JSON.stringify({ ...metadata, image: undefined }, null, 2)}</pre>
+          </ScrollArea>
+        )}
       </div>
     </div>
   ) : (
-    <p className="mt-8 text-center text-xl">Rent Data Loading...</p>
+    <p className="mt-8 text-center text-xl">Preparing data...</p>
   );
 };
 
